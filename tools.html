@@ -34,14 +34,31 @@ body{font-family:var(--sans);color:var(--text);background:var(--off-white);overf
 ::selection{background:var(--orange-dim);color:var(--orange)}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,48,135,0.08);padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,48,135,0.08);padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{font-family:var(--serif);font-size:20px;color:var(--navy);text-decoration:none;font-weight:700}
 .nav-logo span{color:var(--orange)}
 .nav-links{display:flex;gap:20px;list-style:none;align-items:center}
 .nav-links a{font-size:13px;color:var(--text-2);text-decoration:none;font-weight:500;transition:color 0.2s}
 .nav-links a:hover,.nav-links a.active{color:var(--navy)}
 .nav-cta{background:var(--orange)!important;color:white!important;padding:8px 18px;border-radius:8px;font-weight:600!important}
-@media(max-width:768px){.nav-links{display:none}nav{padding:14px 20px}}
+/* Hamburger */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:300}
+.nav-hamburger span{display:block;width:24px;height:2px;background:var(--navy);border-radius:2px;transition:all 0.3s}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.nav-hamburger.open span:nth-child(2){opacity:0;transform:translateX(-8px)}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+/* Mobile menu */
+.mobile-menu{display:none;position:fixed;inset:0;background:var(--navy);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:80px 40px 40px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:22px;color:rgba(255,255,255,0.8);text-decoration:none;font-weight:600;font-family:var(--serif);padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.08);width:100%;text-align:center;transition:color 0.2s}
+.mobile-menu a:hover{color:var(--orange)}
+.mobile-menu a.mob-cta{background:var(--orange);color:white!important;border-radius:var(--radius);border:none;margin-top:16px;padding:16px 0}
+@media(max-width:900px){.nav-links{gap:16px}}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-hamburger{display:flex}
+  nav{padding:14px 20px}
+}
 
 /* HERO */
 .page-hero{background:var(--navy);padding:120px 40px 70px;text-align:center;position:relative;overflow:hidden}
@@ -174,11 +191,25 @@ main{max-width:860px;margin:0 auto;padding:60px 40px 100px}
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="index.html#tips">Free Tips</a></li>
-    <li><a href="index.html#free-pdf">Free PDF</a></li>
+    <li><a href="index.html#classes">Live Classes</a></li>
     <li><a href="index.html#course">Course</a></li>
-    <li><a href="index.html#free-pdf" class="nav-cta">Get Free PDF</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="https://bandbooster.gumroad.com/l/vftwo" target="_blank" class="nav-cta">Get Free PDF</a></li>
   </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="index.html#tips" onclick="closeMenu()">Free Tips</a>
+  <a href="index.html#classes" onclick="closeMenu()">Live Classes</a>
+  <a href="index.html#course" onclick="closeMenu()">Course</a>
+  <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+  <a href="index.html#free-pdf" class="mob-cta" onclick="closeMenu()">Get Free PDF →</a>
+</div>
 
 <div class="page-hero">
   <div class="hero-glow"></div>
@@ -540,6 +571,27 @@ function updateCalc(){
 
 // init
 updateCalc();
+</script>
+
+<script>
+function toggleMenu(){
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  btn.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+function closeMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('mobileMenu').addEventListener('click', function(e){
+  if(e.target === this) closeMenu();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeMenu();
+});
 </script>
 </body>
 </html>
